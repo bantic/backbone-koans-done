@@ -13,6 +13,8 @@ describe('About Backbone.Events', function() {
         // How would you give basicObject these functions?
         // Hint: http://documentcloud.github.com/backbone/#Events
         
+        _.extend(basicObject, Backbone.Events);
+
         expect(typeof basicObject.bind).toEqual('function');
         expect(typeof basicObject.unbind).toEqual('function');
         expect(typeof basicObject.trigger).toEqual('function');
@@ -23,6 +25,7 @@ describe('About Backbone.Events', function() {
         
         obj.bind('basic event', callback);
         
+        obj.trigger("basic event");
         // How would you cause the callback for this custom event to be called?
         
         expect(callback).toHaveBeenCalled();
@@ -37,7 +40,7 @@ describe('About Backbone.Events', function() {
             }
         });
         
-        obj.trigger('some event');
+        obj.trigger('some event', 'arg1', 'arg2');
         
         expect(passedArgs).toEqual(['arg1', 'arg2']);
     });
@@ -51,7 +54,7 @@ describe('About Backbone.Events', function() {
         
         // How would you get 'this.color' to refer to 'foo' in the changeColor function?
         
-        obj.bind('an event', changeColor);
+        obj.bind('an event', changeColor, foo);
         
         obj.trigger('an event');
         
@@ -63,6 +66,8 @@ describe('About Backbone.Events', function() {
         
         obj.bind('all', callback);
         
+        obj.trigger("custom event");
+
         expect(callback.callCount).toBe(1);
         expect(callback.mostRecentCall.args[0]).toBe('custom event');
     });
@@ -78,13 +83,15 @@ describe('About Backbone.Events', function() {
         obj.bind('bar', spy1);
         
         // How do you unbind just a single callback for the event?
-        
+
+        obj.unbind('foo', spy1);
         obj.trigger('foo');
         
         expect(spy1).not.toHaveBeenCalled();
         
         // How do you unbind all callbacks tied to the event with a single method?
         
+        obj.unbind('foo');
         obj.trigger('foo');
         
         expect(spy2.callCount).toEqual(1);
@@ -92,6 +99,7 @@ describe('About Backbone.Events', function() {
         
         // How do you unbind all callbacks and events tied to the object with a single method?
         
+        obj.unbind('bar');
         obj.trigger('bar');
         
         expect(spy1).not.toHaveBeenCalled();

@@ -2,7 +2,7 @@ describe('About Backbone.Model', function() {
     
     it('Can be created with default values for its attributes.', function() {
         var todo = new Todo();
-        
+                
         expect(todo.get('text')).toBe("What should the default be here?");
     });
     
